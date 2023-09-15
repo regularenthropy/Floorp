@@ -57,81 +57,55 @@ const bmsController = {
       );
     },
     servicesObs: data_ => {
-      let data = data_.wrappedJSObject;
+      const data = data_.wrappedJSObject;
+      const selectBox = document.getElementById(data.id.replace("BSB-", "select-"));
       switch (data.eventType) {
         case "mouseOver":
-          document.getElementById(
-            data.id.replace("BSB-", "select-")
-          ).style.border = "1px solid blue";
-          bmsController.controllFunctions.setUserContextColorLine(
-            data.id.replace("BSB-", "")
-          );
+          selectBox.style.border = "1px solid blue";
+          bmsController.controllFunctions.setUserContextColorLine(data.id.replace("BSB-", ""));
           break;
         case "mouseOut":
-          document.getElementById(
-            data.id.replace("BSB-", "select-")
-          ).style.border = "";
-          bmsController.controllFunctions.setUserContextColorLine(
-            data.id.replace("BSB-", "")
-          );
+          selectBox.style.border = "";
+          bmsController.controllFunctions.setUserContextColorLine(data.id.replace("BSB-", ""));
           break;
       }
     },
     setFlexOrder: () => {
-      const fxSidebarPosition = "sidebar.position_start";
-      const floorpSidebarPosition = "floorp.browser.sidebar.right";
-      let fxSidebarPositionPref = Services.prefs.getBoolPref(fxSidebarPosition);
-      let floorpSidebarPositionPref = Services.prefs.getBoolPref(
-        floorpSidebarPosition
-      );
-      let fxSidebar = document.getElementById("sidebar-box");
-      let fxSidebarSplitter = document.getElementById("sidebar-splitter");
-      let floorpSidebar = document.getElementById("sidebar2-box");
-      let floorpSidebarSplitter = document.getElementById("sidebar-splitter2");
-      let floorpSidebarSelectBox =
-        document.getElementById("sidebar-select-box");
-      let browserBox = document.getElementById("appcontent");
-
-      // floorpSidebarSelectBox has to always be the window's last child
-      // Seeking opinions on whether we should nest.
-      if (
-        fxSidebarPositionPref === true &&
-        floorpSidebarPositionPref === true
-      ) {
-        //Firefox's sidebar position: left, Floorp's sidebar position: right
+      const fxSidebarPositionPref = Services.prefs.getBoolPref("sidebar.position_start");
+      const floorpSidebarPositionPref = Services.prefs.getBoolPref("floorp.browser.sidebar.right");
+      const fxSidebar = document.getElementById("sidebar-box");
+      const fxSidebarSplitter = document.getElementById("sidebar-splitter");
+      const floorpSidebar = document.getElementById("sidebar2-box");
+      const floorpSidebarSplitter = document.getElementById("sidebar-splitter2");
+      const floorpSidebarSelectBox = document.getElementById("sidebar-select-box");
+      const browserBox = document.getElementById("appcontent");
+    
+      if (fxSidebarPositionPref && floorpSidebarPositionPref) {
+        // Firefox's sidebar position: left, Floorp's sidebar position: right
         fxSidebar.style.order = "0";
         fxSidebarSplitter.style.order = "1";
         browserBox.style.order = "2";
         floorpSidebarSplitter.style.order = "3";
         floorpSidebar.style.order = "4";
         floorpSidebarSelectBox.style.order = "5";
-      } else if (
-        fxSidebarPositionPref === true &&
-        floorpSidebarPositionPref === false
-      ) {
-        //Firefox's sidebar position: left, Floorp's sidebar position: left
+      } else if (fxSidebarPositionPref && !floorpSidebarPositionPref) {
+        // Firefox's sidebar position: left, Floorp's sidebar position: left
         floorpSidebarSelectBox.style.order = "0";
         floorpSidebar.style.order = "1";
         floorpSidebarSplitter.style.order = "2";
         fxSidebar.style.order = "3";
         fxSidebarSplitter.style.order = "4";
         browserBox.style.order = "5";
-      } else if (
-        fxSidebarPositionPref === false &&
-        floorpSidebarPositionPref === true
-      ) {
-        //Firefox's sidebar position: right, Floorp's sidebar position: right
+      } else if (!fxSidebarPositionPref && floorpSidebarPositionPref) {
+        // Firefox's sidebar position: right, Floorp's sidebar position: right
         browserBox.style.order = "0";
         fxSidebarSplitter.style.order = "1";
         fxSidebar.style.order = "2";
         floorpSidebarSplitter.style.order = "3";
         floorpSidebar.style.order = "4";
         floorpSidebarSelectBox.style.order = "5";
-      } else if (
-        fxSidebarPositionPref === false &&
-        floorpSidebarPositionPref === false
-      ) {
-        //Firefox's sidebar position: right, Floorp's sidebar position: left
+      } else {
+        // Firefox's sidebar position: right, Floorp's sidebar position: left
         floorpSidebarSelectBox.style.order = "0";
         floorpSidebar.style.order = "1";
         floorpSidebarSplitter.style.order = "2";
@@ -197,10 +171,9 @@ const bmsController = {
         clickedWebpanel = event.explicitOriginalTarget.id;
         webpanel = clickedWebpanel.replace("select-", "webpanel");
         contextWebpanel = document.getElementById(webpanel);
-        needLoadedWebpanel =
-          document.getElementsByClassName("needLoadedWebpanel");
-        for (let i = 0; i < needLoadedWebpanel.length; i++) {
-          needLoadedWebpanel[i].disabled = contextWebpanel == null;
+        needLoadedWebpanel = document.getElementsByClassName("needLoadedWebpanel");
+        for (const webpanel of needLoadedWebpanels) {
+            webpanel.disabled = contextWebpanel == null;
         }
       },
       showWithNumber: num => {
@@ -279,7 +252,7 @@ const bmsController = {
         selectedURL.startsWith("floorp//") ||
           Services.prefs.getBoolPref("floorp.browser.sidebar2.addons.enabled")
       );
-      for (let elem of document.getElementsByClassName("webpanels")) {
+      for (const elem of document.getElementsByClassName("webpanels")) {
         elem.hidden = true;
         if (
           elem.classList.contains("isFloorp") ||
@@ -305,7 +278,7 @@ const bmsController = {
       }
     },
     unloadWebpanel: id => {
-      let sidebarsplit2 = document.getElementById("sidebar-splitter2");
+      const sidebarsplit2 = document.getElementById("sidebar-splitter2");
       if (id == bmsController.nowPage) {
         bmsController.nowPage = null;
         if (sidebarsplit2.getAttribute("hidden") != "true") {
@@ -327,67 +300,66 @@ const bmsController = {
       const wibpanel_usercontext =
         BROWSER_SIDEBAR_DATA.data[id].usercontext ?? 0;
       const container_list = ContextualIdentityService.getPublicIdentities();
-      if (
-        wibpanel_usercontext != 0 &&
-        container_list.findIndex(
-          e => e.userContextId === wibpanel_usercontext
-        ) != -1
-      ) {
-        let container_color =
-          container_list[
-            container_list.findIndex(
-              e => e.userContextId === wibpanel_usercontext
-            )
-          ].color;
-        document.getElementById(`select-${id}`).style.borderLeft = `solid 2px ${
+      const container_index = containerList.findIndex(e => e.userContextId === webpanelUserContext);
+      if (wibpanel_usercontext !== 0 && container_index !== -1) {
+        const container_color = container_list[
+          container_index
+        ].color;
+        const selected_elem = document.getElementById(`select-${id}`);
+        selected_elem.style.borderLeft = `solid 2px ${
           container_color == "toolbar"
             ? "var(--toolbar-field-color)"
             : container_color
         }`;
-      } else if (
-        document.getElementById(`select-${id}`).style.border != "1px solid blue"
-      ) {
-        document.getElementById(`select-${id}`).style.borderLeft = "";
+      } else {
+      const selected_elem = document.getElementById(`select-${id}`);
+      if (selected_elem.style.border != "1px solid blue") {
+        selected_elem.style.borderLeft = "";
+        }
       }
     },
     changeCheckPanel: doChecked => {
-      for (let elem of document.getElementsByClassName("sidepanel-icon")) {
+      const sidepanel_icons = document.getElementsByClassName("sidepanel-icon");
+      for (const elem of sidepanel_icons) {
         elem.setAttribute("checked", "false");
       }
       if (doChecked) {
         let selectedNode = document.querySelector(
           `#select-${bmsController.nowPage}`
         );
-        if (selectedNode != null) {
+        if (selectedNode) {
           selectedNode.setAttribute("checked", "true");
         }
       }
     },
     changeVisibleBrowserManagerSidebar: doVisible => {
+      const htmlElem = document.querySelector("html");
       if (doVisible) {
-        document.querySelector("html").removeAttribute("invisibleBMS");
+        htmlElem.removeAttribute("invisibleBMS");
       } else {
-        document.querySelector("html").setAttribute("invisibleBMS", "true");
+        htmlElem.setAttribute("invisibleBMS", "true");
       }
     },
     changeVisibleCommandButton: hidden => {
-      for (let elem of sidebar_icons) {
+      for (const elem of sidebar_icons) {
         document.getElementById(elem).hidden = hidden;
       }
     },
     changeVisibleWenpanel: () => {
-      let siderbar2header = document.getElementById("sidebar2-header");
-      let sidebarsplit2 = document.getElementById("sidebar-splitter2");
-      let sidebar2box = document.getElementById("sidebar2-box");
-      let sidebarSetting = {
+      const siderbar2header = document.getElementById("sidebar2-header");
+      const sidebarsplit2 = document.getElementById("sidebar-splitter2");
+      const sidebar2box = document.getElementById("sidebar2-box");
+      const sidebarSetting = {
         true: ["auto", "", "", "false"],
         false: ["0", "0", "none", "true"],
       };
-      let doDisplay = sidebarsplit2.getAttribute("hidden") == "true";
+      const doDisplay = sidebarsplit2.getAttribute("hidden") == "true";
+
       sidebar2box.style.minWidth = sidebarSetting[doDisplay][0];
       sidebar2box.style.maxWidth = sidebarSetting[doDisplay][1];
       siderbar2header.style.display = sidebarSetting[doDisplay][2];
       sidebarsplit2.setAttribute("hidden", sidebarSetting[doDisplay][3]);
+
       bmsController.controllFunctions.changeCheckPanel(doDisplay);
       Services.prefs.setBoolPref(
         "floorp.browser.sidebar.is.displayed",
@@ -396,7 +368,7 @@ const bmsController = {
     },
     setSidebarWidth: webpanel_id => {
       if (
-        webpanel_id != null &&
+        webpanel_id &&
         BROWSER_SIDEBAR_DATA.index.includes(webpanel_id)
       ) {
         const panelWidth =
@@ -411,7 +383,7 @@ const bmsController = {
     visibleWebpanel: () => {
       const webpanel_id = bmsController.nowPage;
       if (
-        webpanel_id != null &&
+        webpanel_id &&
         BROWSER_SIDEBAR_DATA.index.includes(webpanel_id)
       ) {
         bmsController.controllFunctions.makeWebpanel(webpanel_id);
@@ -750,28 +722,24 @@ const bmsController = {
     Services.prefs.getBoolPref("floorp.browser.sidebar.enable", true)
   );
   Services.prefs.addObserver(`floorp.browser.sidebar2.data`, function () {
-    let TEMP_BROWSER_SIDEBAR_DATA = JSON.parse(
-      JSON.stringify(BROWSER_SIDEBAR_DATA)
-    );
+    let TEMP_BROWSER_SIDEBAR_DATA = JSON.parse(JSON.stringify(BROWSER_SIDEBAR_DATA));
     BROWSER_SIDEBAR_DATA = JSON.parse(
       Services.prefs.getStringPref(`floorp.browser.sidebar2.data`, undefined)
     );
-    for (let elem of BROWSER_SIDEBAR_DATA.index) {
-      if (
-        document.querySelector(`#webpanel${elem}`) &&
-        JSON.stringify(BROWSER_SIDEBAR_DATA.data[elem]) !=
-          JSON.stringify(TEMP_BROWSER_SIDEBAR_DATA.data[elem])
-      ) {
-        if (
-          bmsController.nowPage == elem &&
-          !(sidebarsplit2.getAttribute("hidden") == "true")
-        ) {
+  
+    for (const elem of BROWSER_SIDEBAR_DATA.index) {
+      const webpanel = document.querySelector(`#webpanel${elem}`);
+      const dataChanged = JSON.stringify(BROWSER_SIDEBAR_DATA.data[elem]) !== JSON.stringify(TEMP_BROWSER_SIDEBAR_DATA.data[elem]);
+  
+      if (webpanel && dataChanged) {
+        if (bmsController.nowPage === elem && sidebarsplit2.getAttribute("hidden") !== "true") {
           bmsController.controllFunctions.makeWebpanel(elem);
         } else {
           bmsController.controllFunctions.unloadWebpanel(elem);
         }
       }
     }
+  
     bmsController.controllFunctions.makeSidebarIcon();
   });
   Services.obs.addObserver(
