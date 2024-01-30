@@ -6,18 +6,19 @@ assignees: []
 
 body:
   - type: markdown
-    value: |
-      ## Friendly Reminder
-      As a team with very limited development time, we require that all issues be described accurately and concisely. Failure to adhere to these guidelines will result in your issue being closed without response.
-
-      **Feature Requests:** Do not submit them here. Use [Discussions](https://github.com/Floorp-Projects/Floorp/discussions/new?category=feature-request).
-      
-      For Japanese: 日本人の場合は、日本語で書いても構いません。
-
-      ## Disclaimer
-      **Please note:**
-      - No support for operating systems below Windows 10.
-      - DRM content is not supported. Do not report DRM-related issues.
+    attributes:
+      value: |
+        ## Friendly Reminder
+        As a team with very limited development time, we require that all issues be described accurately and concisely. Failure to adhere to these guidelines will result in your issue being closed without response.
+  
+        **Feature Requests:** Do not submit them here. Use [Discussions](https://github.com/Floorp-Projects/Floorp/discussions/new?category=feature-request).
+        
+        For Japanese: 日本人の場合は、日本語で書いても構いません。
+  
+        ## Disclaimer
+        **Please note:**
+        - No support for operating systems below Windows 10.
+        - DRM content is not supported. Do not report DRM-related issues.
 
   - type: checkboxes
     attributes:
