@@ -38,6 +38,7 @@ body:
       label: Bug Summary
       description: Provide a clear, concise description of the bug.
       placeholder: Brief bug description...
+    validations:
       required: true
 
   - type: textarea
@@ -45,28 +46,33 @@ body:
       label: Reproduction Steps
       description: List the steps to reproduce the behavior.
       placeholder: "1.\n2.\n3.\n4."
+    validations:
       required: true
 
   - type: textarea
     attributes:
       label: Expected Behavior
       description: A clear and concise description of what you expected to happen.
+    validations:
       required: true
 
   - type: textarea
     attributes:
       label: Actual Behavior
       description: A clear and concise description of what actually happened. Include screenshots if applicable.
+    validations:
       required: true
 
   - type: input
     attributes:
       label: Browser Version
+    validations:
       required: true
 
   - type: input
     attributes:
       label: Operating System
+    validations:
       required: true
 
   - type: textarea
